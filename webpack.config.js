@@ -1,0 +1,36 @@
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+  devtool: 'cheap-module-eval-source-map',
+  entry: ['webpack-hot-middleware/client', 'babel-polyfill', './src/index'],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/',
+  },
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['eslint-loader'],
+        include: [path.resolve(__dirname, 'src')],
+      },
+      {
+        test: /\.js$/,
+        use: ['react-hot-loader', 'babel-loader'],
+        include: [path.resolve(__dirname, 'src')],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'postcss-loader',
+        ],
+      },
+    ],
+  },
+};
